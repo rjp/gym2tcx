@@ -11,6 +11,17 @@
       <xsl:variable name="cdt"><xsl:value-of select="date:seconds($end)"/></xsl:variable>
       <xsl:variable name="lkm"><xsl:value-of select="(//km)[last()]"/></xsl:variable>
       <xsl:variable name="lkc"><xsl:value-of select="(//kCal)[last()]"/></xsl:variable>
+<xsl:variable name="sumBPM" select="sum(//interval/bpm)"/>
+<xsl:variable name="countBPM" select="count(//interval/bpm)"/>
+<xsl:variable name="vMaxBPM">
+  <xsl:for-each select="//interval">
+    <xsl:sort select="bpm" data-type="number" order="descending" />
+    <xsl:if test="position() = 1">
+      <xsl:value-of select="bpm"/>
+    </xsl:if>
+  </xsl:for-each>
+</xsl:variable>
+
       <xsl:template match="/">
 
           <TrainingCenterDatabase xmlns="http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/ActivityExtension/v2 http://www.garmin.com/xmlschemas/ActivityExtensionv2.xsd http://www.garmin.com/xmlschemas/FatCalories/v1 http://www.garmin.com/xmlschemas/fatcalorieextensionv1.xsd http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2 http://www.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd" xmlns:ns3="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
@@ -21,6 +32,10 @@
                         <TotalTimeSeconds><xsl:value-of select="$cdt - $sdt"/>.00</TotalTimeSeconds>
                         <DistanceMeters><xsl:value-of select="1000*$lkm"/>.00</DistanceMeters>
                         <Calories><xsl:value-of select="$lkc"/></Calories>
+<xsl:if test="$countBPM > 0">
+<AverageHeartRateBpm><xsl:value-of select="$sumBPM div $countBPM"/></AverageHeartRateBpm>
+</xsl:if>
+<MaximumHeartRateBpm><xsl:value-of select="$vMaxBPM"/></MaximumHeartRateBpm>
                         <Intensity>Active</Intensity>
                         <TriggerMethod>Manual</TriggerMethod>
                         <Track>
