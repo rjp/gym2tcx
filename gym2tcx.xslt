@@ -33,9 +33,9 @@
                         <DistanceMeters><xsl:value-of select="1000*$lkm"/>.00</DistanceMeters>
                         <Calories><xsl:value-of select="$lkc"/></Calories>
 <xsl:if test="$countBPM > 0">
-<AverageHeartRateBpm><xsl:value-of select="$sumBPM div $countBPM"/></AverageHeartRateBpm>
+    <AverageHeartRateBpm><Value><xsl:value-of select="round($sumBPM div $countBPM)"/></Value></AverageHeartRateBpm>
+    <MaximumHeartRateBpm><Value><xsl:value-of select="$vMaxBPM"/></Value></MaximumHeartRateBpm>
 </xsl:if>
-<MaximumHeartRateBpm><xsl:value-of select="$vMaxBPM"/></MaximumHeartRateBpm>
                         <Intensity>Active</Intensity>
                         <TriggerMethod>Manual</TriggerMethod>
                         <Track>
