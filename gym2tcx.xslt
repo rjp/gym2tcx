@@ -2,6 +2,7 @@
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:date="http://exslt.org/dates-and-times"
+    extension-element-prefixes="date"
 >
       <xsl:output method="xml" indent="yes"/>
       <xsl:variable name="start"><xsl:value-of select="//openTime"/></xsl:variable>
@@ -15,8 +16,8 @@
           <TrainingCenterDatabase xmlns="http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/ActivityExtension/v2 http://www.garmin.com/xmlschemas/ActivityExtensionv2.xsd http://www.garmin.com/xmlschemas/FatCalories/v1 http://www.garmin.com/xmlschemas/fatcalorieextensionv1.xsd http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2 http://www.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd" xmlns:ns3="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
             <Activities>
                 <Activity Sport="Other">
-                    <Id>AWKME:<xsl:value-of select="$sdt"/>:</Id>
-                    <Lap StartTime="AWKME:{$sdt}:">
+                    <Id><xsl:value-of select="$start"/></Id>
+                    <Lap StartTime="{$start}">
                         <TotalTimeSeconds><xsl:value-of select="$cdt - $sdt"/>.00</TotalTimeSeconds>
                         <DistanceMeters><xsl:value-of select="1000*$lkm"/>.00</DistanceMeters>
                         <Calories><xsl:value-of select="$lkc"/></Calories>
@@ -26,7 +27,7 @@
                         <xsl:for-each select="//interval">
                             <Trackpoint>
                                 <xsl:if test="sec">
-                                    <Time>AWKME:<xsl:value-of select="$sdt + sec"/>:</Time>
+                                    <Time><xsl:value-of select="date:add($start,concat('PT',sec,'S'))"/></Time>
                                 </xsl:if>
                             <xsl:if test="km">
                                 <DistanceMeters><xsl:value-of select="1000*km"/></DistanceMeters>
